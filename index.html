@@ -125,6 +125,164 @@
   }
 </script>
 
+   <div class="container">
+    <h1>Horaires des Salles de Cinéma</h1>
+
+    <div class="room" id="room-1">
+      <h2>Salle 1</h2>
+      <div class="schedule" id="schedule-room-1">
+        <div class="film">14:00 - Film A</div>
+        <div class="film">16:30 - Film B</div>
+        <div class="film">19:00 - Film C</div>
+        <div class="film">21:30 - Film D</div>
+      </div>
+      <div class="status" id="status-room-1"></div>
+    </div>
+
+    <div class="room" id="room-2">
+      <h2>Salle 2</h2>
+      <div class="schedule" id="schedule-room-2">
+        <div class="film">13:00 - Film E</div>
+        <div class="film">15:30 - Film F</div>
+        <div class="film">18:00 - Film G</div>
+        <div class="film">20:30 - Film H</div>
+      </div>
+      <div class="status" id="status-room-2"></div>
+    </div>
+
+    <div class="room" id="room-3">
+      <h2>Salle 3</h2>
+      <div class="schedule" id="schedule-room-3">
+        <div class="film">12:00 - Film I</div>
+        <div class="film">14:30 - Film J</div>
+        <div class="film">17:00 - Film K</div>
+        <div class="film">19:30 - Film L</div>
+      </div>
+      <div class="status" id="status-room-3"></div>
+    </div>
+
+    <div class="room" id="room-4">
+      <h2>Salle 4</h2>
+      <div class="schedule" id="schedule-room-4">
+        <div class="film">13:30 - Film M</div>
+        <div class="film">16:00 - Film N</div>
+        <div class="film">18:30 - Film O</div>
+        <div class="film">21:00 - Film P</div>
+      </div>
+      <div class="status" id="status-room-4"></div>
+    </div>
+
+    <div class="room" id="room-5">
+      <h2>Salle 5</h2>
+      <div class="schedule" id="schedule-room-5">
+        <div class="film">12:30 - Film Q</div>
+        <div class="film">15:00 - Film R</div>
+        <div class="film">17:30 - Film S</div>
+        <div class="film">20:00 - Film T</div>
+      </div>
+      <div class="status" id="status-room-5"></div>
+    </div>
+
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const rooms = [
+        {
+          id: "room-1",
+          schedule: [
+            { time: "14:00", title: "Film A" },
+            { time: "16:30", title: "Film B" },
+            { time: "19:00", title: "Film C" },
+            { time: "21:30", title: "Film D" }
+          ]
+        },
+        {
+          id: "room-2",
+          schedule: [
+            { time: "13:00", title: "Film E" },
+            { time: "15:30", title: "Film F" },
+            { time: "18:00", title: "Film G" },
+            { time: "20:30", title: "Film H" }
+          ]
+        },
+        {
+          id: "room-3",
+          schedule: [
+            { time: "12:00", title: "Film I" },
+            { time: "14:30", title: "Film J" },
+            { time: "17:00", title: "Film K" },
+            { time: "19:30", title: "Film L" }
+          ]
+        },
+        {
+          id: "room-4",
+          schedule: [
+            { time: "13:30", title: "Film M" },
+            { time: "16:00", title: "Film N" },
+            { time: "18:30", title: "Film O" },
+            { time: "21:00", title: "Film P" }
+          ]
+        },
+        {
+          id: "room-5",
+          schedule: [
+            { time: "12:30", title: "Film Q" },
+            { time: "15:00", title: "Film R" },
+            { time: "17:30", title: "Film S" },
+            { time: "20:00", title: "Film T" }
+          ]
+        }
+      ];
+
+      function getMinutesUntilShow(time) {
+        const [hour, minute] = time.split(":").map(Number);
+        const showTime = new Date();
+        showTime.setHours(hour, minute, 0, 0);
+
+        const now = new Date();
+        const differenceInMs = showTime - now;
+        return Math.floor(differenceInMs / 60000); // Convertir en minutes
+      }
+
+      function updateRoomStatus(room) {
+        const now = new Date();
+        let currentShow = null;
+        let nextShow = null;
+
+        room.schedule.forEach((showtime, i) => {
+          const minutesUntilShow = getMinutesUntilShow(showtime.time);
+
+          if (minutesUntilShow <= 0 && minutesUntilShow > -120) {
+            currentShow = showtime;
+            document.getElementById(room.id).querySelectorAll('.film')[i].classList.add('current');
+          } else if (minutesUntilShow > 0 && !nextShow) {
+            nextShow = { ...showtime, minutesUntil: minutesUntilShow };
+          }
+        });
+
+        const statusElement = document.getElementById(`status-${room.id}`);
+
+        if (currentShow) {
+          statusElement.innerHTML = `<span class="highlight">En cours : ${currentShow.title}</span>`;
+        } else if (nextShow) {
+          statusElement.innerHTML = `Prochaine séance : ${nextShow.title} dans ${nextShow.minutesUntil} minutes.`;
+        } else {
+          statusElement.innerHTML = "Pas de prochaines séances aujourd'hui.";
+        }
+      }
+
+      function updateAllRooms() {
+        rooms.forEach(room => {
+          updateRoomStatus(room);
+        });
+      }
+
+      updateAllRooms();
+      setInterval(updateAllRooms, 60000); // Mise à jour toutes les minutes
+    });
+  </script>
+
 
 </body>
 </html>
