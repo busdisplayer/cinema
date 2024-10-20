@@ -124,5 +124,60 @@
   }
 </script>
 
+  <h1>Salle 1</h1>
+  <div class="status" id="status"></div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const showtimes = [
+        { time: "14:00", title: "Film A" },
+        { time: "16:30", title: "Film B" },
+        { time: "19:00", title: "Film C" },
+        { time: "21:30", title: "Film D" }
+      ];
+
+      const statusElement = document.getElementById("status");
+
+      function getMinutesUntilShow(time) {
+        const [hour, minute] = time.split(":").map(Number);
+        const showTime = new Date();
+        showTime.setHours(hour, minute, 0, 0);
+
+        const now = new Date();
+        const differenceInMs = showTime - now;
+        return Math.floor(differenceInMs / 60000); // Convertir en minutes
+      }
+
+      function updateStatus() {
+        const now = new Date();
+        let currentShow = null;
+        let nextShow = null;
+
+        for (let i = 0; i < showtimes.length; i++) {
+          const minutesUntilShow = getMinutesUntilShow(showtimes[i].time);
+
+          if (minutesUntilShow <= 0 && minutesUntilShow > -120) {
+            currentShow = showtimes[i];
+          } else if (minutesUntilShow > 0) {
+            nextShow = { ...showtimes[i], minutesUntil: minutesUntilShow };
+            break;
+          }
+        }
+
+        if (currentShow) {
+          statusElement.innerHTML = `<span class="highlight">En cours : ${currentShow.title}</span>`;
+        } else if (nextShow) {
+          statusElement.innerHTML = `Prochaine séance : ${nextShow.title} dans ${nextShow.minutesUntil} minutes.`;
+        } else {
+          statusElement.innerHTML = "Pas de prochaines séances aujourd'hui.";
+        }
+      }
+
+      // Mettre à jour toutes les minutes
+      updateStatus();
+      setInterval(updateStatus, 60000);
+    });
+  </script>
+
 </body>
 </html>
