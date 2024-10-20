@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Slider avec W3.CSS</title>
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <style>
+    .slider-container {
+      position: relative;
+      width: 100%;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .slides {
+      display: none;
+    }
+
+    .slider-image {
+      width: 100%;
+      height: auto;
+    }
+
+    .slider-content {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      color: white;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 15px;
+      border-radius: 5px;
+    }
+
+    /* Control Buttons */
+    .w3-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0,0,0,0.6);
+      color: white;
+    }
+
+    .w3-button:hover {
+      background-color: rgba(0,0,0,0.8);
+    }
+
+    .prev {
+      left: 0;
+    }
+
+    .next {
+      right: 0;
+    }
+
+    /* Add animation to the slides */
+    .w3-animate-fading {
+      animation: fading 2s infinite;
+    }
+
+    @keyframes fading {
+      from { opacity: 0.4 }
+      to { opacity: 1 }
+    }
+  </style>
+</head>
+<body>
+
+<div class="slider-container w3-content w3-display-container">
+  <!-- Slide 1 -->
+  <div class="slides w3-animate-fading">
+    <img class="slider-image" src="https://via.placeholder.com/800x400" alt="Slide 1">
+    <div class="slider-content w3-display-bottomleft">
+      <h2>Slide 1 Title</h2>
+      <p>This is the description for slide 1.</p>
+    </div>
+  </div>
+
+  <!-- Slide 2 -->
+  <div class="slides w3-animate-fading">
+    <img class="slider-image" src="https://via.placeholder.com/800x400" alt="Slide 2">
+    <div class="slider-content w3-display-bottomleft">
+      <h2>Slide 2 Title</h2>
+      <p>This is the description for slide 2.</p>
+    </div>
+  </div>
+
+  <!-- Slide 3 -->
+  <div class="slides w3-animate-fading">
+    <img class="slider-image" src="https://via.placeholder.com/800x400" alt="Slide 3">
+    <div class="slider-content w3-display-bottomleft">
+      <h2>Slide 3 Title</h2>
+      <p>This is the description for slide 3.</p>
+    </div>
+  </div>
+
+  <!-- Previous and Next buttons -->
+  <button class="w3-button w3-display-left prev" onclick="plusDivs(-1)">&#10094;</button>
+  <button class="w3-button w3-display-right next" onclick="plusDivs(1)">&#10095;</button>
+</div>
+
+<script>
+  var slideIndex = 1;
+  showDivs(slideIndex);
+
+  function plusDivs(n) {
+    showDivs(slideIndex += n);
+  }
+
+  function showDivs(n) {
+    var i;
+    var x = document.getElementsByClassName("slides");
+    if (n > x.length) { slideIndex = 1 }
+    if (n < 1) { slideIndex = x.length }
+    for (i = 0; i < x.length; i++) {
+      x[i].style.display = "none";
+    }
+    x[slideIndex - 1].style.display = "block";
+  }
+</script>
+
+</body>
+</html>
